@@ -1,0 +1,52 @@
+[gd_scene load_steps=9 format=3 uid="uid://dh4moyqsnw0mo"]
+
+[ext_resource type="PackedScene" uid="uid://bnx4hithcij6y" path="res://addons/godot-xr-tools/hands/model/Hand_Glove_low_L.gltf" id="1_hq7lv"]
+[ext_resource type="Script" path="res://scene/vrplayer.gd" id="1_qfhf7"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="2_ymqj7"]
+[ext_resource type="PackedScene" uid="uid://csgsp0wuw8ucy" path="res://addons/godot-xr-tools/hands/model/Hand_Glove_low_R.gltf" id="3_lb2ek"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="4_btuap"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="5_s2k2r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ummsd"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yuaji"]
+material = SubResource("StandardMaterial3D_ummsd")
+
+[node name="VRplayer" type="Node3D"]
+script = ExtResource("1_qfhf7")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+tracker = &"left_hand"
+
+[node name="Hand_Glove_low_L" parent="XROrigin3D/LeftHand" instance=ExtResource("1_hq7lv")]
+
+[node name="MovementDirect" parent="XROrigin3D/LeftHand" instance=ExtResource("2_ymqj7")]
+
+[node name="RayCast" type="RayCast3D" parent="XROrigin3D/LeftHand"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="Laser" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+transform = Transform3D(0.027, 0, 0, 0, -4.66401e-08, -0.027, 0, 1.067, -1.18021e-09, 0, 2.35169e-08, -0.538005)
+mesh = SubResource("BoxMesh_yuaji")
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+tracker = &"right_hand"
+
+[node name="Hand_Glove_low_R" parent="XROrigin3D/RightHand" instance=ExtResource("3_lb2ek")]
+
+[node name="MovementTurn" parent="XROrigin3D/RightHand" instance=ExtResource("4_btuap")]
+
+[node name="RayCast" type="RayCast3D" parent="XROrigin3D/RightHand"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="Laser" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+transform = Transform3D(0.027, 0, 0, 0, -4.66401e-08, -0.027, 0, 1.067, -1.18021e-09, 0, 2.35169e-08, -0.538005)
+mesh = SubResource("BoxMesh_yuaji")
+skeleton = NodePath("../../LeftHand")
+
+[node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("5_s2k2r")]
